@@ -1,0 +1,13 @@
+=== modified file 'OpenPetra.build'
+--- OpenPetra.build	2014-07-17 14:50:29 +0000
++++ OpenPetra.build	2014-07-31 08:05:30 +0000
+@@ -571,7 +571,7 @@
+ </target>
+ 
+ <target name="pullVCSVersionInfo">
+-    <exec program="bzr" commandline="version-info" output="${dir.delivery}/bin/vcs-revision.txt"/>
++    <exec program="bzr" commandline="version-info" output="${dir.delivery}/bin/vcs-revision.txt" failonerror="false"/>
+     <echo message="Version Control System version updated in file ${dir.delivery}/bin/vcs-revision.txt" />
+ </target>
+ 
+
