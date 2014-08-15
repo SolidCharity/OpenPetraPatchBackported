@@ -1,6 +1,5 @@
-=== modified file 'csharp/ICT/BuildTools/GenerateWinForms/ControlGeneratorGrids.cs'
---- csharp/ICT/BuildTools/GenerateWinForms/ControlGeneratorGrids.cs	2014-07-17 16:07:41 +0000
-+++ csharp/ICT/BuildTools/GenerateWinForms/ControlGeneratorGrids.cs	2014-08-15 13:52:32 +0000
+--- a/csharp/ICT/BuildTools/GenerateWinForms/ControlGeneratorGrids.cs	2014-07-17 16:07:41 +0000
++++ b/csharp/ICT/BuildTools/GenerateWinForms/ControlGeneratorGrids.cs	2014-08-15 13:52:32 +0000
 @@ -4,7 +4,7 @@
  // @Authors:
  //       timop

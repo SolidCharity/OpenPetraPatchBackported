@@ -1,6 +1,5 @@
-=== modified file 'csharp/ICT/Common/Printing/GfxPrinter.cs'
---- csharp/ICT/Common/Printing/GfxPrinter.cs	2014-08-06 15:33:53 +0000
-+++ csharp/ICT/Common/Printing/GfxPrinter.cs	2014-08-15 13:51:04 +0000
+--- a/csharp/ICT/Common/Printing/GfxPrinter.cs	2014-08-06 15:33:53 +0000
++++ b/csharp/ICT/Common/Printing/GfxPrinter.cs	2014-08-15 13:51:04 +0000
 @@ -4,7 +4,7 @@
  // @Authors:
  //       timop
