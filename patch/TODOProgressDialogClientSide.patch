@@ -33,31 +33,22 @@
              timer1.Start();
          }
  
-@@ -101,13 +106,20 @@ namespace Ict.Petra.Client.CommonDialogs
+@@ -101,7 +106,14 @@ namespace Ict.Petra.Client.CommonDialogs
  
              if (CancelConfirmationResult == DialogResult.Yes)
              {
--                try
+-                TRemote.MCommon.WebConnectors.CancelJob();
 +                if (FQueryServerForProgress)
-                 {
--                    TRemote.MCommon.WebConnectors.CancelJob();
-+                    try
-+                    {
-+                        TRemote.MCommon.WebConnectors.CancelJob();
-+                    }
-+                    catch (Exception Exc)
-+                    {
-+                        TLogging.Log("While cancelling a job from a Progress Dialog we got the following Exception:\r\n" + Exc.ToString());
-+                    }
-                 }
--                catch (Exception Exc)
++                {
++                    TRemote.MCommon.WebConnectors.CancelJob();
++                }
 +                else
-                 {
--                    TLogging.Log("While cancelling a job from a Progress Dialog we got the following Exception:\r\n" + Exc.ToString());
++                {
 +                    FCancelled = true;
-                 }
++                }
  
                  this.DialogResult = DialogResult.Cancel;
+ 
 @@ -117,6 +129,65 @@ namespace Ict.Petra.Client.CommonDialogs
              }
          }
