@@ -1,9 +1,13 @@
---- a/csharp/ICT/Petra/Client/CommonDialogs/ProgressDialog.cs
-+++ b/csharp/ICT/Petra/Client/CommonDialogs/ProgressDialog.cs
-@@ -37,19 +37,21 @@ namespace Ict.Petra.Client.CommonDialogs
-     {
+=== modified file 'csharp/ICT/Petra/Client/CommonDialogs/ProgressDialog.cs'
+--- a/csharp/ICT/Petra/Client/CommonDialogs/ProgressDialog.cs	2014-09-18 15:09:54 +0000
++++ b/csharp/ICT/Petra/Client/CommonDialogs/ProgressDialog.cs	2014-09-18 15:14:24 +0000
+@@ -38,19 +38,24 @@
          private bool FConfirmedClosing = false;
          private bool FShowCancellationConfirmationQuestion = false;
+         private bool FCancelled = false;
++        private string FMessage, FCaption;
++        private int FTotal, FCurrentProgress = 0;
++        private bool FFinished = false;
 +        private bool FQueryServerForProgress = true;
  
          /// <summary>
@@ -23,7 +27,7 @@
          {
              //
              // Required for Windows Form Designer support
-@@ -66,6 +68,9 @@ namespace Ict.Petra.Client.CommonDialogs
+@@ -67,6 +72,9 @@
  
              TRemote.MCommon.WebConnectors.Reset();
              AWorkerThread.Start();
@@ -33,31 +37,27 @@
              timer1.Start();
          }
  
-@@ -101,7 +106,14 @@ namespace Ict.Petra.Client.CommonDialogs
+@@ -102,11 +110,76 @@
  
              if (CancelConfirmationResult == DialogResult.Yes)
              {
 -                TRemote.MCommon.WebConnectors.CancelJob();
 +                if (FQueryServerForProgress)
 +                {
-+                    TRemote.MCommon.WebConnectors.CancelJob();
++                    try
++                    {
++                        TRemote.MCommon.WebConnectors.CancelJob();
++                    }
++                    catch (Exception Exc)
++                    {
++                        TLogging.Log("While cancelling a job from a Progress Dialog we got the following Exception:\r\n" + Exc.ToString());
++                    }
 +                }
-+                else
-+                {
-+                    FCancelled = true;
-+                }
- 
-                 this.DialogResult = DialogResult.Cancel;
- 
-@@ -117,6 +129,65 @@ namespace Ict.Petra.Client.CommonDialogs
++
+                 FCancelled = true;
              }
          }
  
-+        private string FMessage, FCaption;
-+        private int FTotal, FCurrentProgress = 0;
-+        private bool FFinished = false;
-+        private bool FCancelled = false;
-+
 +        /// the message to be displayed
 +        public string Message
 +        {
@@ -115,7 +115,7 @@
          private void Timer1Tick(object sender, EventArgs e)
          {
              string caption;
-@@ -124,16 +195,32 @@ namespace Ict.Petra.Client.CommonDialogs
+@@ -114,16 +187,36 @@
              int percentage;
              bool finished;
  
@@ -123,6 +123,12 @@
 -                    out message,
 -                    out percentage,
 -                    out finished))
+-            {
+-                this.Text = caption;
+-                this.lblMessage.Text = message;
+-                this.progressBar.Value = percentage;
+-
+-                if (finished)
 +            if (FQueryServerForProgress)
 +            {
 +                if (TRemote.MCommon.WebConnectors.GetCurrentState(out caption,
@@ -136,24 +142,24 @@
 +
 +                    if (finished)
 +                    {
-+                        this.DialogResult = DialogResult.OK;
++                        this.DialogResult = FCancelled?DialogResult.Cancel:DialogResult.OK;
 +                        FConfirmedClosing = true;
 +                        Close();
 +                    }
 +                }
 +            }
 +            else
-             {
--                this.Text = caption;
--                this.lblMessage.Text = message;
--                this.progressBar.Value = percentage;
++            {
 +                this.Text = FCaption;
 +                this.lblMessage.Text = FMessage;
-+                this.progressBar.Value = Convert.ToInt32((100.0m * FCurrentProgress) / FTotal);
- 
--                if (finished)
++
++                if (FTotal > 0)
++                {
++                    this.progressBar.Value = Convert.ToInt32((100.0m * FCurrentProgress) / FTotal);
++                }
++
 +                if (FFinished)
                  {
-                     this.DialogResult = DialogResult.OK;
+                     this.DialogResult = FCancelled ? DialogResult.Cancel : DialogResult.OK;
                      FConfirmedClosing = true;
 
