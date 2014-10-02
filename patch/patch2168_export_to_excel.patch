@@ -1,0 +1,30 @@
+=== modified file 'csharp/ICT/Common/IO/Csv2Xml.cs'
+--- a/csharp/ICT/Common/IO/Csv2Xml.cs	2014-03-07 17:19:37 +0000
++++ b/csharp/ICT/Common/IO/Csv2Xml.cs	2014-10-02 04:22:02 +0000
+@@ -504,6 +504,25 @@
+                     attrName = attrName[0] + StringHelper.UpperCamelCase(attrName, ' ', false, false).Substring(1);
+                 }
+ 
++                // some characters are not allowed in the name of an XmlAttribute
++                attrName = attrName.Replace("%", "percent");
++                attrName = attrName.Replace("-", "hyphen");
++                attrName = attrName.Replace("/", "slash");
++                attrName = attrName.Replace(" ", "space");
++
++                try
++                {
++                    XmlAttribute attr = myDoc.CreateAttribute(attrName);
++                }
++                catch (Exception)
++                {
++                    char[] arr = attrName.ToCharArray();
++
++                    // filter only letters and digits
++                    arr = Array.FindAll <char>(arr, (c => (char.IsLetterOrDigit(c))));
++                    attrName = new string(arr);
++                }
++
+                 AllAttributes.Add(attrName);
+             }
+ 
+
