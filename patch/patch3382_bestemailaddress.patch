@@ -26,7 +26,7 @@
  
  namespace Ict.Petra.Server.MPartner.Common
  {
-@@ -306,5 +309,72 @@
+@@ -306,5 +309,76 @@
  
              return ReturnValue;
          }
@@ -48,7 +48,8 @@
 +        public static string GetBestEmailAddressWithDetails(Int64 APartnerKey, out PLocationTable AAddress, out string ACountryNameLocal)
 +        {
 +            string EmailAddress = "";
-+            TDBTransaction Transaction = DBAccess.GDBAccessObj.BeginTransaction(IsolationLevel.ReadUncommitted);
++            bool NewTransaction;
++            TDBTransaction Transaction = DBAccess.GDBAccessObj.GetNewOrExistingTransaction(IsolationLevel.ReadCommitted, out NewTransaction);
 +
 +            AAddress = null;
 +            ACountryNameLocal = "";
@@ -93,7 +94,10 @@
 +                }
 +            }
 +
-+            DBAccess.GDBAccessObj.RollbackTransaction();
++            if (NewTransaction)
++            {
++                DBAccess.GDBAccessObj.RollbackTransaction();
++            }
 +
 +            return EmailAddress;
 +        }
