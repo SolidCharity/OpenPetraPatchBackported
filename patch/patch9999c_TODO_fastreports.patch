@@ -1,0 +1,19 @@
+--- a/csharp/ICT/Petra/Client/MReporting/Gui/FastReportsWrapper.cs.orig	2014-11-14 17:08:33.166526266 +0100
++++ b/csharp/ICT/Petra/Client/MReporting/Gui/FastReportsWrapper.cs	2014-11-14 17:09:36.230524347 +0100
+@@ -241,6 +241,9 @@
+         /// </summary>
+         public void ShowErrorPopup()
+         {
++            // in OpenPetra OpenSource, we do not use the FastReport DLLs
++            return;
++
+             // Note from AlanP: This method will show an appropriate Fast Reports error message box depending on the InitState
+             // We want to show this error if FastReports is supposed to be used but is not installed.
+             // We do not want to show it if FastReports is NOT supposed to be used....
+@@ -628,4 +631,4 @@
+             FPetraUtilsObject.WriteToStatusBar("");
+         }
+     }
+-}
+\ No newline at end of file
++}
